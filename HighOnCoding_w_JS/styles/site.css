@@ -1,0 +1,80 @@
+.hoc-header {
+    display: flex;
+    width: 1200px;
+    margin: 20px;
+    font-family: sans-serif;
+    background-color: #52A7FA;
+}
+
+#logo {
+    color: white;
+    padding: 0.6em 1em 0.6em 1em;
+    font-weight: normal;
+    font-size: 40px;
+    margin-left: 20px;
+}
+
+#menuItem1 {
+    color: white;
+    font-size: 18pt;
+    font-weight: bolder;
+    margin-top: 35px;
+    margin-left: 40px;
+}
+
+#menuItem2 {
+    color: white;
+    font-size: 18pt;
+    font-weight: lighter;
+    margin-top: 35px;
+    margin-left: 40px;
+}
+
+.hoc-hero {
+    width: 1080px;
+    margin: 20px;
+    margin-left: 60px;
+    font-family: sans-serif;
+    background-color: #DDDEE1;
+}
+
+#heroHeadline {
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    padding: 20px 10px 20px 20px;
+}
+
+#heroText {
+    font-size: 12pt;
+    color: black;
+    padding: 20px 10px 10px 20px;
+}
+
+.hoc-article {
+    width: 1080px;
+    margin: 20px;
+    margin-left: 60px;
+    font-family: sans-serif;
+}
+
+.headline {
+    font-size: 25px;
+    font-weight: lighter;
+    color: blue;
+}
+
+.text {
+    font-size: 12pt;
+    color: black;
+    padding: 20px 10px 10px 0px;
+}
+
+.footer {
+    font-size: 12pt;
+    font-weight: bold;
+    color: white;
+    background-color: orange;
+    padding: 5px 5px 5px 5px;
+    white-space: pre;
+}

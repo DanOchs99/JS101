@@ -1,0 +1,124 @@
+#container {
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+    box-sizing: border-box;
+    width: 80vw;
+    margin: 0 10vw 0 10vw;
+}
+
+#menu {
+    display: flex;
+    flex-direction: row;
+    width: 80vw;
+    font-size: 18pt;
+}
+
+#prompt {
+    color: gray;
+    box-sizing: border-box;
+    width: 15vw;
+    font-size: 20pt;
+    margin: 10px 20px 0 20px;
+}
+
+#taskName {
+    border-style: solid;
+    border-color: gray;
+    border-width: 4px;
+    font-size: 14pt;
+    color: gray;
+    box-sizing: border-box;
+    width: 50vw;
+    margin: 0 20px 0 0;
+    padding-left: 10px;
+}
+
+#taskAddButton {
+    border-color: gray;
+    background-color: steelblue;
+    box-sizing: border-box;
+    width: 15vw;
+    margin: 5px;
+    padding: 10px;
+    color: white;
+    font-size: 18pt;
+}
+
+#pendingTasks {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+}
+
+#completedTasks {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+}
+
+.heading {
+    color: gray;
+    width: 80vw;
+    font-size: 18pt;
+    box-sizing: border-box;
+    text-align: center;
+    margin: 20px 0 10px 0;
+}
+
+#pendingEmpty,#completedEmpty {
+    border-style: solid;
+    border-color: purple;
+    padding: 23px 0 23px 0; 
+}
+
+.taskItem {
+    display: flex;
+    align-items: center;
+    border-color: gray;
+    background-color: steelblue;
+    box-sizing: border-box;
+    width: 80vw;
+    height: 100px;
+    color: white;
+    font-size: 22pt;
+}
+
+.taskItem label {
+    margin-left: 30px;
+    width: 70%;
+}
+
+.taskItem button {
+    border-style: none;
+    color: lightgray;
+    background-color: steelblue;
+    font-size: 17pt;
+}
+
+input[type=checkbox] {
+    width: 30px;
+    height: 30px;
+    margin-left: 20px;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+input[type=checkbox]:after {
+    content: " ";
+    color: white;
+    background-color: steelblue;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+input[type=checkbox]:checked:after {
+    content: "\2713";
+    font-size: 24;
+    font-weight: bold;
+}
+
+  

@@ -1,0 +1,33 @@
+
+<html>
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/site.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="heading" >
+        <div id="title" >Menu</div>
+        <div id="summary" >We take garden fresh seriously, offering you a farm to table dining experience. Our ingredients are found locally, using only the best organic suppliers available. Check out our popular lunch salad buffet!</div>
+      </div>
+
+      <div id="filters" >
+        <button id="startersButton" onclick="startersClicked(this);" >Starters</button>
+        <button id="entreesButton" onclick="entreesClicked(this);"  >Entrees</button>
+        <button id="dessertsButton" onclick="dessertsClicked(this);"  >Desserts</button>
+      </div>
+
+      <div id="dishes" >
+         <div id="starters" ></div>
+         <div id="entrees" ></div>
+         <div id="desserts" ></div>
+      </div>
+    </div>
+  </body>
+
+  <script src="scripts/dishes.js"></script>
+  <script src="scripts/app.js"></script>
+
+</html>

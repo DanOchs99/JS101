@@ -6,4 +6,6 @@
 
 11/27/19 - Restaurant Menu
 
+11/27/19 - News API
+
 

@@ -1,0 +1,42 @@
+#container {
+    display: flex;
+    flex-direction: column;
+    margin: 30px;
+    align-items: left;
+}
+
+.newsItem {
+    margin-bottom: 20px;
+}
+
+.newsTitle, .newsAuthor, .newsDesc, .newsURL, .newsDate {
+    width: 90%;
+    text-align: left;
+    margin-bottom: 5px;
+    overflow-wrap: anywhere;
+}
+
+.newsImage {
+    width: 90%;
+}
+
+.sourceItem {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.sourceButton {
+    color: white;
+    background-color: blue;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+.sourceDesc {
+    margin-right: 10px;
+}

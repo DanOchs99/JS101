@@ -1,11 +1,11 @@
 # JS101
 
-11/25/19 - High On Coding with JavaScript
+High On Coding with JavaScript
 
-11/26/19 - TODO List
+TODO List
 
-11/27/19 - Restaurant Menu
+Restaurant Menu
 
-11/27/19 - News API
+News API
 
 

@@ -37,42 +37,44 @@ function readJSON() {
             task.completed = t_obj.completed;
             completed_tasks.push(task);
         }
+    }
+}
 
-        // rebuild the HTML lists
-        for (let i=0;i<pending_tasks.length;i++) {
-            el = `<div class="taskItem" draggable="true" ondragstart="drag(event);" ondragover="allowDrop(event);" ondrop="drop(event);" >
-              <input type="checkbox" onClick="onComplete(this);" />
-              <label>${pending_tasks[i].name}</label>
-              <button onClick="onRemove(this);">Remove</button>
-              </div>`
-            let ptasksList = document.getElementById("pendingTasksList");
-            ptasksList.insertAdjacentHTML('beforeend',el);
-        }
-        for (let i=0;i<completed_tasks.length;i++) {
-            el = `<div class="taskItem" draggable="true" ondragstart="drag(event);" ondragover="allowDrop(event);" ondrop="drop(event);" >
-              <input type="checkbox" onClick="onComplete(this);" checked />
-              <label>${completed_tasks[i].name}</label>
-              <button onClick="onRemove(this);">Remove</button>
-              </div>`
-            let ptasksList = document.getElementById("completedTasksList");
-            ptasksList.insertAdjacentHTML('beforeend',el);
-        }
-        // display no items if either list is empty...
-        let emptyPending = document.getElementById("pendingEmpty");
-        if (pending_tasks.length==0) {
-            emptyPending.style.display = "block";
-        }
-        else {
-            emptyPending.style.display = "none";
-        }
-        let emptyCompleted = document.getElementById("completedEmpty");
-        if (completed_tasks.length==0) {
-            emptyCompleted.style.display = "block";
-        }
-        else
-        {
-            emptyCompleted.style.display = "none";
-        }
+function rebuildHTML() {
+    // rebuild the HTML lists after a page load
+    let el = '';
+    for (let i=0;i<pending_tasks.length;i++) {
+        el = `<div class="taskItem" draggable="true" ondragstart="drag(event);" ondragover="allowDrop(event);" ondrop="drop(event);" >
+          <input type="checkbox" onClick="onComplete(this);" />
+          <label>${pending_tasks[i].name}</label>
+          <button onClick="onRemove(this);">Remove</button>
+          </div>`
+        let ptasksList = document.getElementById("pendingTasksList");
+        ptasksList.insertAdjacentHTML('beforeend',el);
+    }
+    for (let i=0;i<completed_tasks.length;i++) {
+        el = `<div class="taskItem" draggable="true" ondragstart="drag(event);" ondragover="allowDrop(event);" ondrop="drop(event);" >
+          <input type="checkbox" onClick="onComplete(this);" checked />
+          <label>${completed_tasks[i].name}</label>
+          <button onClick="onRemove(this);">Remove</button>
+          </div>`
+        let ptasksList = document.getElementById("completedTasksList");
+        ptasksList.insertAdjacentHTML('beforeend',el);
+    }
+    // display no items if either list is empty...
+    let emptyPending = document.getElementById("pendingEmpty");
+    if (pending_tasks.length==0) {
+        emptyPending.style.display = "block";
+    }
+    else {
+        emptyPending.style.display = "none";
+    }
+    let emptyCompleted = document.getElementById("completedEmpty");
+    if (completed_tasks.length==0) {
+        emptyCompleted.style.display = "block";
+    }
+    else {
+        emptyCompleted.style.display = "none";
     }
 }
 
@@ -203,10 +205,16 @@ function onComplete(checkbox) {
 
 // drag & drop stuff
 function drag(ev) {
-    console.log('Start drag:');
-    console.log(ev.target.innerHTML);
-
-    //ev.dataTransfer.setData("task", ev.target);
+    // find drag node index
+    let parentEl = ev.target.parentElement;
+    let index = -1;
+    for (let i=0; i<parentEl.children.length; i++) {
+        if (parentEl.children[i].isSameNode(ev.target)) {
+            index = i;
+        }
+    }
+    ev.dataTransfer.setData("index", index);
+    ev.dataTransfer.setData("check", ev.target.children[0].checked);
 }
 
 function allowDrop(ev) {
@@ -215,11 +223,28 @@ function allowDrop(ev) {
 
 function drop(ev) {
     ev.preventDefault();
-    console.log('Attempt drop:');
-    console.log(ev.target.innerHTML);
+    let dropDiv = {};
+    // if child fired event get the parent
+    if (ev.target.children.length == 0) {
+        dropDiv = ev.target.parentElement;
+    }
+    else {
+        dropDiv = ev.target;
+    }
+    let check = false;
+    if (ev.dataTransfer.getData("check")=='true') {
+        check = true;
+    }
+    if (dropDiv.children[0].checked == check) {
+        // get the drag element
+        let index = ev.dataTransfer.getData("index");
+        let dragDiv = dropDiv.parentElement.children[index];
 
-    //let el = ev.dataTransfer.getData("task");
-    // do the swap here...
+        // swap the labels
+        let tempText = dropDiv.children[1].innerHTML;
+        dropDiv.children[1].innerHTML = dragDiv.children[1].innerHTML;
+        dragDiv.children[1].innerHTML = tempText;
+    }
 }
 
 // create empty task lists to start
@@ -232,4 +257,8 @@ taskAddBtn.addEventListener('click',onAdd);
 
 // see if saved todo list exists
 readJSON();
+if ((pending_tasks.length > 0) || (completed_tasks.length > 0)) {
+    rebuildHTML();
+}
+
 

@@ -5,15 +5,37 @@ let allSourcesHTML = allSources.join(' ');
 sourcesContainer.innerHTML = allSourcesHTML;
 
 function createItem(source) {
-    // add buttons and descriptions for news sources
-    let sourceItem = `<div class="sourceItem">`;
-    if (source.name != null) {
-        sourceItem += `  <button class="sourceButton" id=${source.id} onclick="sourceClicked(this);" >${source.name}</button>`;
-    }
-    if (source.description != null) {
-        sourceItem += `  <div class="sourceDesc" >${source.description}</div>`;
-    }
-    sourceItem += `</div>`;
+    // check news availability
+    keyNews = getKey('unknown');
+    let url = `https://newsapi.org/v2/top-headlines?sources=${source.id}&apiKey=${keyNews}`;
+    let req = new Request(url);
+    let numArticles = 1;   // fix this section !!
+    //let sourceItem = '';
+    //(async ()=> {
+        //await fetch(req)
+        //    .then(function(response) {
+        //        response.json()
+        //        .then(function(myJSON) {
+        //            if (myJSON.status == 'ok') {
+        //                numArticles = myJSON.articles.length;
+        //            }
+        //        });
+        //    });
+        // create button and description for this news source
+        sourceItem = `<div class="sourceItem">`;
+        if (source.name != null) {
+            if (numArticles == 0) {
+                sourceItem += `  <button class="sourceButton" id=${source.id} onclick="sourceClicked(this);" >${source.name}</button>`;
+            }
+            else {
+                sourceItem += `  <button class="sourceButton active" id=${source.id} onclick="sourceClicked(this);" >${source.name}</button>`;
+            }
+        }
+        if (source.description != null) {
+            sourceItem += `  <div class="sourceDesc" >${source.description} (${numArticles})</div>`;
+        }
+        sourceItem += `</div>`;
+    //})();
     return sourceItem;
 }
 
@@ -43,34 +65,33 @@ function createNewsItem(article) {
 }
 
 function sourceClicked(button) {
-    keyNews = getKey('unknown');
-    
-    //console.log(`Go get news from ${button.id}...`);
+    if (button.classList.contains('active')) {
+        keyNews = getKey('unknown');
 
-    let url = `https://newsapi.org/v2/top-headlines?sources=${button.id}&apiKey=${keyNews}`;
-    let req = new Request(url);
-    fetch(req)
-        .then(function(response) {
-            response.json()
-            .then(function(myJSON) {
-                // console.log(JSON.stringify(myJSON));
-                let title = document.getElementById("title");
-                title.innerHTML = button.innerHTML;
+        let url = `https://newsapi.org/v2/top-headlines?sources=${button.id}&apiKey=${keyNews}`;
+        let req = new Request(url);
+        fetch(req)
+            .then(function(response) {
+                response.json()
+                .then(function(myJSON) {
+                    let title = document.getElementById("title");
+                    title.innerHTML = button.innerHTML;
 
-                let children = sourcesContainer.children;
-                while (children.length > 0) {
-                    sourcesContainer.removeChild(children[0]);
-                }
-                if (myJSON.articles.length > 0) {
-                    let allNews = myJSON.articles.map((article) => createNewsItem(article));
-                    let allNewsHTML = allNews.join(' ');
-                    sourcesContainer.innerHTML = allNewsHTML;
-                }
-                else {
-                    sourcesContainer.innerHTML = 'No news at this time.';
-                }
+                    let children = sourcesContainer.children;
+                    while (children.length > 0) {
+                        sourcesContainer.removeChild(children[0]);
+                    }
+                    if (myJSON.articles.length > 0) {
+                        let allNews = myJSON.articles.map((article) => createNewsItem(article));
+                        let allNewsHTML = allNews.join(' ');
+                        sourcesContainer.innerHTML = allNewsHTML;
+                    }
+                    else {
+                        sourcesContainer.innerHTML = 'No news at this time.';
+                    }
+                });
             });
-        })
+    }
 }
 
 function getKey(status) {

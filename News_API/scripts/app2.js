@@ -17,10 +17,35 @@ function createItem(source) {
     return sourceItem;
 }
 
+function createNewsItem(article) {
+    let newsItem = `<div class="newsItem">`;
+    if (article.urlToImage != null) {
+        newsItem += `  <img class="newsImage" src=${article.urlToImage} />`;
+    }
+    if (article.title != null) {
+        newsItem += `  <div class="newsTitle" >${article.title}</div>`;
+    }
+    if (article.author != null) {
+        newsItem += `  <div class="newsAuthor" >${article.author}</div>`;
+    }
+    if (article.description != null) {
+        newsItem += `  <div class="newsDesc" >${article.description}</div>`;
+    }
+    if (article.url != null) {
+        newsItem += `  <div class="newsURL" >${article.url}</div>`;
+    }
+    if (article.publishedAt != null) {
+        pubDate = new Date(article.publishedAt);
+        newsItem += `  <div class="newsDate" >${pubDate.toString()}</div>`;
+    }
+    newsItem += `</div>`;
+    return newsItem;
+}
+
 function sourceClicked(button) {
     keyNews = getKey('unknown');
     
-    console.log(`Go get news from ${button.id}...`);
+    //console.log(`Go get news from ${button.id}...`);
 
     let url = `https://newsapi.org/v2/top-headlines?sources=${button.id}&apiKey=${keyNews}`;
     let req = new Request(url);
@@ -28,7 +53,22 @@ function sourceClicked(button) {
         .then(function(response) {
             response.json()
             .then(function(myJSON) {
-                console.log(JSON.stringify(myJSON));
+                // console.log(JSON.stringify(myJSON));
+                let title = document.getElementById("title");
+                title.innerHTML = button.innerHTML;
+
+                let children = sourcesContainer.children;
+                while (children.length > 0) {
+                    sourcesContainer.removeChild(children[0]);
+                }
+                if (myJSON.articles.length > 0) {
+                    let allNews = myJSON.articles.map((article) => createNewsItem(article));
+                    let allNewsHTML = allNews.join(' ');
+                    sourcesContainer.innerHTML = allNewsHTML;
+                }
+                else {
+                    sourcesContainer.innerHTML = 'No news at this time.';
+                }
             });
         })
 }

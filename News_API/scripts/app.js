@@ -1,10 +1,10 @@
 let newsContainer = document.getElementById("container"); 
 
-let allNews = news.articles.map((article) => createItem(article));
+let allNews = news.articles.map((article) => createNewsItem(article));
 let allNewsHTML = allNews.join(' ');
 newsContainer.innerHTML = allNewsHTML;
 
-function createItem(article) {
+function createNewsItem(article) {
     let newsItem = `<div class="newsItem">`;
     if (article.urlToImage != null) {
         newsItem += `  <img class="newsImage" src=${article.urlToImage} />`;

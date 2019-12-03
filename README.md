@@ -10,4 +10,6 @@ News API (requires user to supply a NewsAPI API key)
 
 Super Heroes (requires user to supply a OMDb API key)
 
+Coffee Orders
+
 

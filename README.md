@@ -12,4 +12,6 @@ Super Heroes (requires user to supply a OMDb API key)
 
 Coffee Orders
 
+Weather App
+
 

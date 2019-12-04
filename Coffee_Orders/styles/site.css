@@ -1,0 +1,49 @@
+body {
+    font-family: sans-serif;
+    color: steelblue;
+}
+
+#emailTextBox {
+    font-size: 20px;
+    width: 90vw;
+}
+
+#coffeeTextBox {
+    font-size: 20px;
+    width: 90vw;
+}
+
+#orderButton, #searchButton, #deleteButton {
+    color: white;
+    background-color: steelblue;
+    font-size: 16px;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+}
+
+.cust {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.email {
+    font-size: 16px;
+    text-align: right;
+    width: 50%;
+    margin-right: 5px;
+}
+
+.coffee {
+    font-size: 16px;
+    text-align: left;
+    width: 50%;
+    margin-left: 5px;
+}

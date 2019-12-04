@@ -1,8 +1,8 @@
 // on load, show the coffee orders
 const url = "http://dc-coffeerun.herokuapp.com/api/coffeeorders/";
-const emailURL = "http://dc-coffeerun.herokuapp.com/api/coffeeorders/emailaddress";
 const container = document.getElementById('container');
 const orderButton  = document.getElementById('orderButton');
+const searchButton = document.getElementById('searchButton');
 const deleteButton = document.getElementById('deleteButton');
 const emailTextBox = document.getElementById('emailTextBox');
 const coffeeTextBox = document.getElementById('coffeeTextBox');
@@ -18,15 +18,35 @@ orderButton.addEventListener('click',() => {
     request.send(JSON.stringify(body))
 });
 
-deleteButton.addEventListener('click',() => {
+searchButton.addEventListener('click',() => {
     let request = new XMLHttpRequest();
-    request.open('DELETE',emailURL);
-    request.setRequestHeader("Content-Type", "application/json");
-    let body = { emailAddress: emailTextBox.value };
+    let emailURL = url + emailTextBox.value;
+    request.open('GET',emailURL);
     request.onload = function() {
+        console.log(request.responseText);
+        if (request.responseText == 'null') {
+            coffeeTextBox.value = `${emailTextBox.value} was not found.`;
+        }
+        else {
+            let order = JSON.parse(this.responseText);
+            coffeeTextBox.value = order.coffee;
+        }
+        
         updateOrders();
     }
-    request.send(JSON.stringify(body))
+    request.send();
+});
+
+deleteButton.addEventListener('click',() => {
+    let request = new XMLHttpRequest();
+    let emailURL = url + emailTextBox.value;
+    request.open('DELETE',emailURL);
+    request.onload = function() {
+        emailTextBox.value = '';
+        coffeeTextBox.value = '';
+        updateOrders();
+    }
+    request.send();
 });
 
 function updateOrders() {
@@ -39,7 +59,7 @@ function updateOrders() {
         keys = Object.keys(orders);
         ordersHTML = '';
         for (let i=0; i<keys.length; i++) {
-            ordersHTML += `<div>${orders[keys[i]].emailAddress}     ${orders[keys[i]].coffee}</div>`
+            ordersHTML += `<div class="cust"><div class="email">${orders[keys[i]].emailAddress}</div><div class="coffee">${orders[keys[i]].coffee}</div></div>`
         }
         container.innerHTML = ordersHTML;
     }

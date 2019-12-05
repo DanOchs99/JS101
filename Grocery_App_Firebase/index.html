@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link rel="stylesheet" href="styles/site.css">
+</head>
+
+<body>
+    <h1>Grocery Lists</h1>
+    <button id="signUpButton">Sign Up</button>
+    <button id="signInButton">Sign In</button>
+    <button id="logoffButton">Logoff</button>
+    <div id="userDisplay">Please sign in.</div>
+    <button id="createListButton">Create</button>
+    <button id="viewListButton">View</button>
+    <button id="deleteListButton">Delete</button>
+    <input list="lists" type="text" id="listInputBox" placeholder="grocery list">
+    <datalist id="lists">
+    </datalist>
+
+    <div id="container"></div>
+    <button id="addItemButton">Add Item</button>
+    <button id="deleteItemButton">Delete Item</button>
+    <input list="items" type="text" id="itemInputBox" placeholder="grocery item">
+    <datalist id="items">
+    </datalist>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+<!-- Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+<!-- Firebase Realtime Database Library -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDwKQiF5f1lmKqAFSmYDJAD5NtiuA6ir90",
+    authDomain: "mytodolist-c65f2.firebaseapp.com",
+    databaseURL: "https://mytodolist-c65f2.firebaseio.com",
+    projectId: "mytodolist-c65f2",
+    storageBucket: "mytodolist-c65f2.appspot.com",
+    messagingSenderId: "635561888209",
+    appId: "1:635561888209:web:fe3a284cfe15b07b4bf8f0",
+    measurementId: "G-22NXCJQJEM"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+</body>
+
+<script src="scripts/app.js"></script>
+
+</html>

@@ -14,6 +14,7 @@ const itemInputBox = document.getElementById('itemInputBox');
 const items = document.getElementById('items');
 
 let appUser = {};
+let viewListRef = {};
 
 function simulateClickLogoff() {
     let event = new MouseEvent('click', {
@@ -32,7 +33,7 @@ function updateListData(snapshot_val) {
     if (snapshot_val != null) {
         let userLists = [];
         for (let key in snapshot_val) {
-            userLists.push(key);
+            userLists.push(snapshot_val[key].name);
         }
         userListsHTML = userLists.map(item => `<option value="${item}"></option>`)
         lists.innerHTML = userListsHTML.join(' ');
@@ -89,8 +90,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         viewListButton.style.display = 'inline-block';
         deleteListButton.style.display = 'inline-block';
         listInputBox.style.display = 'inline-block';
+        container.style.display = 'block';
 
-        let userListsRef = firebase.database().ref(user.uid);
+        let userListsRef = firebase.database().ref(appUser.uid);
         userListsRef.on('value', (snapshot) => {
             updateListData(snapshot.val());
         });
@@ -103,41 +105,56 @@ firebase.auth().onAuthStateChanged(function(user) {
         viewListButton.style.display = 'none';
         deleteListButton.style.display = 'none';
         listInputBox.style.display = 'none';
+        container.style.display = 'none';
     }
 });
 
 createListButton.addEventListener('click',() => {
-    // make a new list - NOTE this will overwrite with empty if this list exists!
+    // make a new list
     listName = listInputBox.value;
     let root = firebase.database().ref();
-    root.child(appUser.uid).child(listName).set({0: 'empty'});
+    listObj = {name: listName};
+    root.child(appUser.uid).push().set(listObj);
 });
 
 viewListButton.addEventListener('click',() => {
     // view list in UI
-    let viewListRef = firebase.database().ref(`${appUser.uid}/${listInputBox.value}`);
-    viewListRef.on('value', (snapshot) => {
-        // update the list view
-        container.style.display = 'block';
-        let snapshot_val = snapshot.val();
-        if (snapshot_val != null) {
-            let listItems = [];
-            for (let key in snapshot_val) {
-                listItems.push(snapshot_val[key]);
+    let userListsRef = firebase.database().ref(appUser.uid);
+    let listKey = '';
+    userListsRef.once('value', (snapshot) => {
+        snapshot_val = snapshot.val();
+        for (let key in snapshot_val) {
+            if (snapshot_val[key].name == listInputBox.value) {
+                listKey = key;
+            }
+        }
+        if (listKey != '') {
+            viewListRef = firebase.database().ref(`${appUser.uid}/${listKey}`);
+            viewListRef.on('value', (snapshot) => {
+                // update the list view when the list changes
+                let snapshot_val = snapshot.val();
+                if (snapshot_val != null) {
+                    let listItems = [];
+                    for (let key in snapshot_val) {
+                        if (key != 'name') {
+                            listItems.push(snapshot_val[key]);
+                        }
+                    }
+                    if (listItems.length > 0) {
+                        let displayItemsHTML = listItems.map(item => `<div class='listItem'>${item}</div>`);
+                        container.innerHTML = `<div class='listTitle'>${snapshot_val.name}</div>${displayItemsHTML.join(' ')}`;
+                        let listItemsHTML = listItems.map(item => `<option value="${item}"></option>`);
+                        items.innerHTML = listItemsHTML.join(' ');
+                    }
+                    else {
+                        container.innerHTML = `<div class='listTitle'>${snapshot_val.name}</div>`;
+                        items.innerHTML = '';
+                    }
+                    addItemButton.style.display = 'inline-block';
+                    deleteItemButton.style.display = 'inline-block';
+                    itemInputBox.style.display = 'inline-block';
                 }
-            if (listItems[0] != 'empty') {
-                let displayItemsHTML = listItems.map(item => `<div class='listItem'>${item}</div>`);
-                container.innerHTML = `<div class='listTitle'>${listInputBox.value}</div>${displayItemsHTML.join(' ')}`;
-                let listItemsHTML = listItems.map(item => `<option value="${item}"></option>`);
-                items.innerHTML = listItemsHTML.join(' ');
-            }
-            else {
-                container.innerHTML = `<div class='listTitle'>${listInputBox.value}</div>`;
-                items.innerHTML = '';
-            }
-            addItemButton.style.display = 'inline-block';
-            deleteItemButton.style.display = 'inline-block';
-            itemInputBox.style.display = 'inline-block';
+            });
         }
         else {
             container.innerHTML = `<div>List ${listInputBox.value} not found.</div>`;
@@ -146,7 +163,7 @@ viewListButton.addEventListener('click',() => {
             deleteItemButton.style.display = 'none';
             itemInputBox.style.display = 'none';
         }
-    });        
+    });
 });
 
 deleteListButton.addEventListener('click',() => {
@@ -155,31 +172,24 @@ deleteListButton.addEventListener('click',() => {
 
 addItemButton.addEventListener('click',() => {
     // add an item to list
-    let maxkey = -1;
-    let nextkey = -1;
-    let viewListRef = firebase.database().ref(`${appUser.uid}/${listInputBox.value}`);
-    viewListRef.once('value', (snapshot) => {
-        snapshot_val = snapshot.val();
-        for (let key in snapshot_val) {
-            if (key > maxkey) {
-                maxkey = key;
-            }
-        }
-        if ((maxkey == 0) && (snapshot_val[0] == 'empty')) {
-            nextkey = 0;
-        }
-        else {
-            nextkey = maxkey + 1;
-        }
-    });
-    itemObj = {};
-    itemObj[nextkey] = itemListBox.value;
-    viewListRef.set(itemObj);
+    viewListRef.push(itemInputBox.value);
 });
 
 deleteItemButton.addEventListener('click',() => {
     // delete an item from list
-
+    let delkey = '';    
+    viewListRef.once('value', (snapshot) => {
+        snapshot_val = snapshot.val();
+        for (let key in snapshot_val) {
+            if (snapshot_val[key] == itemInputBox.value) {
+                delkey = key;
+            }
+        }
+    });
+    if (delkey != '') {
+        viewListRef.child(delkey).remove();
+        itemInputBox.value = '';
+    }
 });
 
 

@@ -13,6 +13,9 @@ const deleteItemButton = document.getElementById('deleteItemButton');
 const itemInputBox = document.getElementById('itemInputBox');
 const items = document.getElementById('items');
 
+const userName = document.getElementById('userName');
+const password = document.getElementById('password');
+
 let appUser = {};
 let viewListRef = {};
 
@@ -45,29 +48,25 @@ function updateListData(snapshot_val) {
 
 signUpButton.addEventListener('click',() => {
     // user hit the Sign Up button
-    let email = 'user2@nowhere.org';
-    let password = 'BlahBlah';
-
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    firebase.auth().createUserWithEmailAndPassword(userName.value, password.value).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.log(error.code);
-        console.log(error.message);
+        userDisplay.innerHTML = `Sign Up failed - ${error.message}`;
+        //console.log(error.code);
+        //console.log(error.message);
       });
 });
 
 signInButton.addEventListener('click',() => {
     // user hit the Sign In button
-    let email = 'nobody@nowhere.org';
-    let password = 'BlahBlah';
-
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+    firebase.auth().signInWithEmailAndPassword(userName.value, password.value).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.log(error.code);
-        console.log(error.message);
+        userDisplay.innerHTML = `Sign In failed - ${error.message}`;
+        //console.log(error.code);
+        //console.log(error.message);
       });
 });
 
@@ -85,6 +84,10 @@ firebase.auth().onAuthStateChanged(function(user) {
         // User is signed in.
         userDisplay.innerHTML = user.email;
         appUser = user;
+        userName.style.display = 'none';
+        userName.value = '';
+        password.style.display = 'none';
+        password.value = '';
         //console.log(`User ${user.email} is signed in`);
         createListButton.style.display = 'inline-block';
         viewListButton.style.display = 'inline-block';
@@ -100,6 +103,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         // No user is signed in.
         userDisplay.innerHTML = 'Please sign in.'
         appUser = {};
+        userName.style.display = 'block';
+        password.style.display = 'block';
         //console.log('No user is signed in')
         createListButton.style.display = 'none';
         viewListButton.style.display = 'none';
@@ -143,7 +148,20 @@ viewListButton.addEventListener('click',() => {
                     if (listItems.length > 0) {
                         let displayItemsHTML = listItems.map(item => `<div class='listItem'>${item}</div>`);
                         container.innerHTML = `<div class='listTitle'>${snapshot_val.name}</div>${displayItemsHTML.join(' ')}`;
-                        let listItemsHTML = listItems.map(item => `<option value="${item}"></option>`);
+                        listItemsUnique = [];
+                        let found = false;
+                        for (let i=0; i<listItems.length; i++) {
+                            found = false;
+                            for (let j=0; j<listItemsUnique.length; j++) {
+                                if (listItems[i]==listItemsUnique[j]) {
+                                    found = true;
+                                }
+                            }
+                            if (!found) {
+                                listItemsUnique.push(listItems[i]);
+                            }
+                        }
+                        let listItemsHTML = listItemsUnique.map(item => `<option value="${item}"></option>`);
                         items.innerHTML = listItemsHTML.join(' ');
                     }
                     else {
@@ -168,7 +186,15 @@ viewListButton.addEventListener('click',() => {
 
 deleteListButton.addEventListener('click',() => {
     // delete list from database
-});    
+    viewListRef.remove();
+    listInputBox.value = '';
+    container.innerHTML = '';
+    items.innerHTML = '';
+    addItemButton.style.display = 'none';
+    deleteItemButton.style.display = 'none';
+    itemInputBox.value = '';
+    itemInputBox.style.display = 'none';
+});
 
 addItemButton.addEventListener('click',() => {
     // add an item to list

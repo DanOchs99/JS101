@@ -60,3 +60,7 @@ h1 {
 #itemInputBox {
     display: none;
 }
+
+#userName, #password {
+    display: none;
+}

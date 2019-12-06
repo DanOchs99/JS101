@@ -94,6 +94,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         deleteListButton.style.display = 'inline-block';
         listInputBox.style.display = 'inline-block';
         container.style.display = 'block';
+        container.innerHTML = '';
+        listInputBox.value = '';
+        itemInputBox.value = '';
 
         let userListsRef = firebase.database().ref(appUser.uid);
         userListsRef.on('value', (snapshot) => {
@@ -111,6 +114,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         deleteListButton.style.display = 'none';
         listInputBox.style.display = 'none';
         container.style.display = 'none';
+        addItemButton.style.display = 'none';
+        deleteItemButton.style.display = 'none';
+        itemInputBox.style.display = 'none';
     }
 });
 

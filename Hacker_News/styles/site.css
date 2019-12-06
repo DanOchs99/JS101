@@ -1,0 +1,33 @@
+.title {
+    font-weight: bold;
+}
+
+.url {
+}
+
+.by {
+    font-style: italic;
+    display: inline-block;
+}
+
+.time {
+    font-style: italic;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+button {
+    color: white;
+    background-color: steelblue;
+    font-size: 15px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+#statusDiv {
+    color: steelblue;
+    font-family: sans-serif;
+    font-size: 15px;
+    display: inline-block;
+}
